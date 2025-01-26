@@ -1,6 +1,7 @@
-State sample_from_belief(Belief b){
-
-}
+#include "./components/action.hpp"
+#include "./components/belief.hpp"
+#include "./components/history.hpp"
+#include "./components/state.hpp"
 
 Action action_prog_widen(History h){
     if(C_h.size() <= k_a * std::pow(N(h), alpha_a)){
@@ -21,24 +22,23 @@ Action action_prog_widen(History h){
     return best_a;
 }
 
-struct GenerativeResult{
-    State s_tilde;
-    Observation o;
-    double reward;
-}
 int d_max = 5;
 
-
-
-Action Plan(Belief b){
+Action Plan(ParticleFilterBelief b){
     for(int i = 0; i < n; i++){
-        State s = sample_from_belief(b);
-        simulate_pomcp_dpw(s, b, d_max);
+        /* 
+           the belief is a distribution of states.
+           we can sample a state from the belief.
+        */
+        State s = ParticleFilterBelief::sample_from_belief(b);
+ 
+        /* simulate the POMCP, with state s, 
+         and belief, and a max depth
+         of monte carlo sample tree (MCST) */
+        simulate_pomcp_dpw(s, b, d_max); 
     }
 }
 
 int main(){
 
 }
-
-
